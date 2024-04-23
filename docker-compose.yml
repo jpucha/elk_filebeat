@@ -1,0 +1,61 @@
+version: '3.1'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: elasticsearch
+    #volumes:
+      #- certs:/usr/share/elasticsearch/config/certs
+      #- elasticdata:/usr/share/elasticsearch/data
+      #- ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    environment:
+      - discovery.type=single-node
+      #- ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    ports:
+      - "9200:9200"
+    networks:
+      - elk-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    container_name: kibana
+    #volumes:
+      #- certs:/usr/share/kibana/config/certs
+      #- kibanadata:/usr/share/kibana/data
+      #- ./kibana.yml:/usr/share/kibana/config/kibana.yml
+    #environment:
+      #- ELASTICSEARCH_HOSTS=${ELASTICSEARCH_HOSTS}
+      #- ELASTICSEARCH_USERNAME=atn-user
+      #- ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+      #- ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/ca/ca.crt
+    ports:
+      - "${KIBANA_PORT}:${KIBANA_PORT}"
+    networks:
+      - elk-network
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
+    container_name: logstash
+    #environment:
+      #- ELASTICSEARCH_HOSTS=${ELASTICSEARCH_HOSTS}
+    #volumes:
+      #- certs:/usr/share/logstash/config/certs
+      #- logstashdata:/usr/share/logstash/data
+      #- ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - "5044:5044"
+    networks:
+      - elk-network
+#volumes:
+  #certs:
+    #driver: local
+  #elasticdata:
+    #driver: local
+  #kibanadata:
+    #driver: local
+  #logstashdata:
+    #driver: local
+
+networks:
+  elk-network:
+    driver: bridge
