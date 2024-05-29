@@ -1,0 +1,92 @@
+# amdp-is-customermanagement
+
+## Login with repository
+
+EXECUTE JUST ONE TIME - Before publishing you must log in to the repository
+
+```shell
+# Login with docker
+## Develop
+docker login amdocs360libertydocker.krugercorp.com -u cquilumba
+## Training
+docker login amdtrainingdocker.krugercorp.com -u user
+## Production
+docker login amdlladckrprd.krugercorp.com -u user
+
+# Login with helm
+## Install plugin
+helm plugin install --version master https://github.com/sonatype-nexus-community/helm-nexus-push.git
+
+## Add Kruger seed repo
+helm repo add kruger-seed https://nexusdev.krugercorp.com/repository/kruger-seed-helm/ --username cquilumba --password Password01
+
+## Add Kruger repo
+### Develop
+helm repo add amdocs360-liberty-helm https://nexusdev.krugercorp.com/repository/amdocs360-libertyapis-helm/ --username cquilumba --password Password01
+### Training
+helm repo add training-liberty-helm https://kcnxsprd.krugercorp.com/repository/training-liberty-helm/ --username user --password RMrgGsguWfNy
+### Production
+helm repo add amdocs360-liberty-helm-prod https://kcnxsprd.krugercorp.com/repository/amdocs360-liberty-helm/ --username user --password RMrgGsguWfNy
+```
+### Build project
+
+Execute this to generate project image and publish into repository
+
+```shell
+# DOCKER
+
+## Build docker image
+### Develop
+docker build -t amdocs360libertydocker.krugercorp.com/amdc-filebeat:1.0.0-SNAPSHOT --no-cache .
+### Training Temporal registry (it should be amdtrainingdocker.krugercorp.com when it be done)
+docker build -t amdlladckrprd.krugercorp.com/amdc-filebeat:1.0.0-SNAPSHOT --no-cache .
+### Production
+docker build -t amdlladckrprd.krugercorp.com/amdc-filebeat:1.0.0-RELEASE --no-cache .
+
+## Push docker image
+### Develop
+docker push amdocs360libertydocker.krugercorp.com/amdc-filebeat:1.0.0-SNAPSHOT
+### Training Temporal registry (it should be amdtrainingdocker.krugercorp.com when it be done)
+docker push amdlladckrprd.krugercorp.com/amdc-filebeat:1.0.0-SNAPSHOT
+### Production
+docker push amdlladckrprd.krugercorp.com/amdc-filebeat:1.0.0-RELEASE
+
+## Run docker image (Optional)
+docker run --privileged --name amdc-filebeat dockerdev.krugercorp.com/amdc-filebeat:1.0.0-SNAPSHOT
+
+## Delete docker image (Optional)
+docker rm amdc-filebeat
+
+# HELM
+
+## Update helm repo and dependencies
+helm repo update
+### Develop
+helm dependency update ./deployment/helm/dev
+### Training
+helm dependency update ./deployment/helm/training
+### Production
+helm dependency update ./deployment/helm/prod
+
+## Package helm chart
+### Develop
+helm package ./deployment/helm/dev
+### Training
+helm package ./deployment/helm/training
+### Production
+helm package ./deployment/helm/prod
+
+## Push helm chart
+### Develop
+helm nexus-push amdocs360-libertyapis-helm amdc-filebeat-1.0.0.tgz -u cquilumba -p Password01
+### Training
+helm nexus-push training-liberty-helm amdc-filebeat-1.0.0.tgz -u user -p Password01
+### Production
+helm nexus-push amdocs360-liberty-helm-prod amdc-filebeat-1.0.0.tgz -u smayorga -p RMrgGsguWfNy
+
+## install
+helm install amdc-filebeat --dry-run ./deployment/helm -n libertyapisdev
+
+## create an index template
+## execute the script create_libertyapisdevlogs_template.txt in kibana. 
+## Management --> DevTools

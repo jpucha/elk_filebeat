@@ -1,0 +1,280 @@
+PUT /_index_template/libertyapisdevlogs_template
+{
+  "index_patterns": ["libertyapisdevlogs-*"],
+  "template": {
+	  "mappings": {
+		"properties": {
+		  "@timestamp": {
+			"type": "date"
+		  },
+		  "agent": {
+			"properties": {
+			  "ephemeral_id": {
+				"type": "text",
+				"fields": {
+				  "keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				  }
+				}
+			  },
+			  "id": {
+				"type": "text",
+				"fields": {
+				  "keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				  }
+				}
+			  },
+			  "name": {
+				"type": "text",
+				"fields": {
+				  "keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				  }
+				}
+			  },
+			  "type": {
+				"type": "text",
+				"fields": {
+				  "keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				  }
+				}
+			  },
+			  "version": {
+				"type": "text",
+				"fields": {
+				  "keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				  }
+				}
+			  }
+			}
+		  },
+		  "dateTimeTransactionStart": {
+			"type": "text"
+		  },
+		  "ecs": {
+			"properties": {
+			  "version": {
+				"type": "text",
+				"fields": {
+				  "keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				  }
+				}
+			  }
+			}
+		  },
+		  "host": {
+			"properties": {
+			  "architecture": {
+				"type": "text",
+				"fields": {
+				  "keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				  }
+				}
+			  },
+			  "hostname": {
+				"type": "text",
+				"fields": {
+				  "keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				  }
+				}
+			  },
+			  "id": {
+				"type": "text",
+				"fields": {
+				  "keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				  }
+				}
+			  },
+			  "ip": {
+				"type": "text",
+				"fields": {
+				  "keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				  }
+				}
+			  },
+			  "mac": {
+				"type": "text",
+				"fields": {
+				  "keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				  }
+				}
+			  },
+			  "name": {
+				"type": "text",
+				"fields": {
+				  "keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				  }
+				}
+			  },
+			  "os": {
+				"properties": {
+				  "build": {
+					"type": "text",
+					"fields": {
+					  "keyword": {
+						"type": "keyword",
+						"ignore_above": 256
+					  }
+					}
+				  },
+				  "family": {
+					"type": "text",
+					"fields": {
+					  "keyword": {
+						"type": "keyword",
+						"ignore_above": 256
+					  }
+					}
+				  },
+				  "kernel": {
+					"type": "text",
+					"fields": {
+					  "keyword": {
+						"type": "keyword",
+						"ignore_above": 256
+					  }
+					}
+				  },
+				  "name": {
+					"type": "text",
+					"fields": {
+					  "keyword": {
+						"type": "keyword",
+						"ignore_above": 256
+					  }
+					}
+				  },
+				  "platform": {
+					"type": "text",
+					"fields": {
+					  "keyword": {
+						"type": "keyword",
+						"ignore_above": 256
+					  }
+					}
+				  },
+				  "type": {
+					"type": "text",
+					"fields": {
+					  "keyword": {
+						"type": "keyword",
+						"ignore_above": 256
+					  }
+					}
+				  },
+				  "version": {
+					"type": "text",
+					"fields": {
+					  "keyword": {
+						"type": "keyword",
+						"ignore_above": 256
+					  }
+					}
+				  }
+				}
+			  }
+			}
+		  },
+		  "input": {
+			"properties": {
+			  "type": {
+				"type": "text",
+				"fields": {
+				  "keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				  }
+				}
+			  }
+			}
+		  },
+		  "log": {
+			"properties": {
+			  "file": {
+				"properties": {
+				  "path": {
+					"type": "text",
+					"fields": {
+					  "keyword": {
+						"type": "keyword",
+						"ignore_above": 256
+					  }
+					}
+				  }
+				}
+			  },
+			  "flags": {
+				"type": "text",
+				"fields": {
+				  "keyword": {
+					"type": "keyword",
+					"ignore_above": 256
+				  }
+				}
+			  },
+			  "offset": {
+				"type": "long"
+			  }
+			}
+		  },
+		  "message": {
+			"type": "text",
+			"fields": {
+			  "keyword": {
+				"type": "keyword",
+				"ignore_above": 256
+			  }
+			}
+		  }
+		}
+	  }
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PUT /indexapi-2024.05.28/_mapping
+{
+  "properties": {
+    "dateTimeTransactionStart": {
+      "type": "date",
+      "format": "strict_date_optional_time||epoch_millis"
+    }
+  }
+}

@@ -33,12 +33,22 @@ filebeat.inputs:
     #- /var/log/*.log
     #- c:\programdata\elasticsearch\logs\*
     - C:\logs\*\* 
+  processors:
+    - script:
+        lang: javascript
+        id: truncate_message
+        source: >
+          function process(event) {
+            if (event.Get("message") != null) {
+              event.Put("dateTimeTransactionStart", event.Get("message").substring(0, 23));
+            }
+          }   
   parsers:  
     - multiline:
         type: pattern
         pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}'
         negate: true
-        match: after
+        match: after     
         #include_lines: ['<*> (n|.)*</*>']
   # Exclude lines. A list of regular expressions to match. It drops the lines that are
   # matching any regular expression from the list.
@@ -78,6 +88,9 @@ filebeat.config.modules:
 # ======================= Elasticsearch template setting =======================
 setup.ilm.enabled: false
 setup.template.enabled: false
+# Optional - if you want to set custom index settings
+setup.template.name: "libertyapisdevlogs_template"
+setup.template.pattern: "libertyapisdevlogs-*"
 #setup.template.settings:
   #index.number_of_shards: 1
   #index.codec: best_compression
@@ -157,7 +170,7 @@ output.elasticsearch:
   #api_key: "id:api_key"
   username: "elastic"
   password: "Password01@"
-  index: "indexapi-%{+YYYY.MM.dd}"
+  index: "libertyapisdevlogs-%{+YYYY.MM.dd}"
   ssl:
     verification_mode: none
 
@@ -242,4 +255,3 @@ processors:
 
 # This allows to enable 6.7 migration aliases
 #migration.6_to_7.enabled: true
-
